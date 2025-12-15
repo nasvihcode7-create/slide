@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARAB DREAMS</title>
+    <title>ARAB DREAMS - Business Consultancy</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --apple-black: #000000;
@@ -15,6 +16,7 @@
             --apple-gray-2: #86868B;
             --apple-gray-3: #424245;
             --apple-blue: #0071E3;
+            --apple-blue-hover: #0056b3;
         }
         
         * {
@@ -41,10 +43,15 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            z-index: 100;
+            z-index: 1000;
             background-color: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .header.hidden {
+            transform: translateY(-100%);
         }
         
         .logo-container {
@@ -56,12 +63,44 @@
         .logo {
             height: 62px;
             width: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
         }
         
         .company-name {
             font-size: 20px;
             font-weight: 600;
             letter-spacing: -0.5px;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--apple-gray-2);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .control-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--apple-black);
         }
         
         .hours {
@@ -99,6 +138,30 @@
         .slide.active {
             opacity: 1;
             pointer-events: all;
+        }
+        
+        /* Service list for specific slides */
+        .service-list {
+            list-style: none;
+            max-width: 700px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .service-list li {
+            font-size: 20px;
+            color: var(--apple-gray-3);
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .service-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--apple-blue);
+            font-size: 24px;
         }
         
         /* Slide content */
@@ -140,6 +203,7 @@
             padding: 8px 16px;
             border-radius: 20px;
             backdrop-filter: blur(20px);
+            transition: opacity 0.3s ease;
         }
         
         /* Progress indicator */
@@ -151,6 +215,7 @@
             height: 1px;
             background-color: rgba(0, 0, 0, 0.1);
             z-index: 100;
+            transition: opacity 0.3s ease;
         }
         
         .progress-bar {
@@ -158,6 +223,113 @@
             width: 0%;
             background-color: var(--apple-black);
             transition: width 4s linear;
+        }
+        
+        /* Slide Navigation Dots - Hidden until hover */
+        .nav-dots {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 10px;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+        }
+        
+        .slides-container:hover .nav-dots,
+        .nav-dots:hover {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+        
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--apple-gray-2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-dot:hover {
+            transform: scale(1.3);
+            background-color: var(--apple-gray-3);
+        }
+        
+        .nav-dot.active {
+            background-color: var(--apple-black);
+            transform: scale(1.2);
+        }
+        
+        .nav-dot:hover::after {
+            content: attr(data-title);
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--apple-black);
+            color: var(--apple-white);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        
+        /* Pause overlay */
+        .pause-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: 150;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .pause-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .pause-message {
+            background-color: var(--apple-white);
+            padding: 20px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .pause-overlay.active .pause-message {
+            transform: translateY(0);
+        }
+        
+        /* Hide elements when paused */
+        .slideshow-paused .progress-container,
+        .slideshow-paused .slide-counter,
+        .slideshow-paused .nav-dots {
+            opacity: 0.5;
         }
         
         /* Responsive */
@@ -168,6 +340,10 @@
             
             .slide-description {
                 font-size: 24px;
+            }
+            
+            .service-list li {
+                font-size: 18px;
             }
         }
         
@@ -184,8 +360,10 @@
                 font-size: 18px;
             }
             
-            .hours {
-                font-size: 13px;
+            .control-btn {
+                font-size: 18px;
+                width: 36px;
+                height: 36px;
             }
             
             .slide-headline {
@@ -197,6 +375,10 @@
             .slide-description {
                 font-size: 20px;
                 padding: 0 20px;
+            }
+            
+            .service-list li {
+                font-size: 16px;
             }
             
             .slide-tag {
@@ -211,6 +393,18 @@
             .slide-counter {
                 right: 24px;
                 bottom: 24px;
+            }
+            
+            .nav-dots {
+                right: 20px;
+                padding: 10px 8px;
+                gap: 12px;
+            }
+            
+            .nav-dot:hover::after {
+                font-size: 10px;
+                padding: 4px 8px;
+                right: 20px;
             }
         }
         
@@ -230,6 +424,28 @@
             .company-name {
                 font-size: 16px;
             }
+            
+            .control-btn {
+                font-size: 16px;
+                width: 32px;
+                height: 32px;
+            }
+            
+            .service-list li {
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+            
+            .nav-dots {
+                right: 15px;
+                padding: 8px 6px;
+                gap: 10px;
+            }
+            
+            .nav-dot {
+                width: 8px;
+                height: 8px;
+            }
         }
     </style>
 </head>
@@ -238,9 +454,25 @@
     <div class="header">
         <div class="logo-container">
             <img src="https://arabdreams.com/wp-content/uploads/2024/11/arab-1.png" alt="ARAB DREAMS" class="logo">
-            <div class="company-name"></div>
+            <div class="company-name">ARAB DREAMS</div>
         </div>
-        <div class="hours"></div>
+        <div class="header-controls">
+            <button class="control-btn" id="pauseBtn" title="Pause Slideshow">
+                <i class="fas fa-pause"></i>
+            </button>
+            <button class="control-btn" id="playBtn" title="Play Slideshow" style="display: none;">
+                <i class="fas fa-play"></i>
+            </button>
+            <div class="hours">Sun-Thu: 9AM-6PM</div>
+        </div>
+    </div>
+    
+    <!-- Pause overlay -->
+    <div class="pause-overlay" id="pauseOverlay">
+        <div class="pause-message">
+            <i class="fas fa-pause-circle"></i>
+            Slideshow Paused - Hover over right side to navigate
+        </div>
     </div>
     
     <!-- Progress indicator -->
@@ -250,44 +482,105 @@
     
     <!-- Slide counter -->
     <div class="slide-counter">
-        <span id="currentSlide">1</span> / <span id="totalSlides">5</span>
+        <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
+    </div>
+    
+    <!-- Slide Navigation Dots -->
+    <div class="nav-dots" id="navDots">
+        <!-- Dots will be generated by JavaScript -->
     </div>
     
     <!-- Slides container -->
-    <div class="slides-container">
-        <!-- Slide 1 -->
+    <div class="slides-container" id="slidesContainer">
+        <!-- Slide 1: About Us -->
         <div class="slide active">
-            <div class="slide-tag">Vision</div>
-            <h1 class="slide-headline">Strategic Consulting for the Arab Region</h1>
-            <p class="slide-description">Transforming regional ambitions into sustainable business success through deep market intelligence and cultural insight.</p>
+            <div class="slide-tag">About Us</div>
+            <h1 class="slide-headline">Your Gateway to Business Success in Saudi Arabia & Middle East</h1>
+            <p class="slide-description">Professional consultancy helping entrepreneurs, startups, and corporations establish and grow their business with end-to-end solutions tailored to local regulations and market requirements.</p>
         </div>
         
-        <!-- Slide 2 -->
+        <!-- Slide 2: Business Setup -->
         <div class="slide">
-            <div class="slide-tag">Transformation</div>
-            <h1 class="slide-headline">Digital Innovation & Future Readiness</h1>
-            <p class="slide-description">Integrating cutting-edge technology with traditional business wisdom to create resilient, forward-looking organizations.</p>
+            <div class="slide-tag">Business Setup</div>
+            <h1 class="slide-headline">Company Formation Made Simple</h1>
+            <p class="slide-description">Seamless LLC, branch, or entity registration in Saudi Arabia with complete assistance for all legal and government formalities.</p>
+            <ul class="service-list">
+                <li>LLC, branch, or other entity registration</li>
+                <li>Legal and government formalities assistance</li>
+                <li>Business license processing</li>
+            </ul>
         </div>
         
-        <!-- Slide 3 -->
+        <!-- Slide 3: Business Support -->
         <div class="slide">
-            <div class="slide-tag">Growth</div>
-            <h1 class="slide-headline">Market Entry & Expansion Strategy</h1>
-            <p class="slide-description">Navigating the complex landscapes of Arab markets with precision, cultural sensitivity, and strategic foresight.</p>
+            <div class="slide-tag">Business Support</div>
+            <h1 class="slide-headline">Comprehensive Operational Support</h1>
+            <p class="slide-description">End-to-end business services ensuring compliance and efficiency.</p>
+            <ul class="service-list">
+                <li>Accounting, bookkeeping, and audit</li>
+                <li>Tax compliance and corporate governance</li>
+                <li>Legal advisory and corporate restructuring</li>
+            </ul>
         </div>
         
-        <!-- Slide 4 -->
+        <!-- Slide 4: PRO Services -->
         <div class="slide">
-            <div class="slide-tag">Leadership</div>
-            <h1 class="slide-headline">Developing Arab Business Leaders</h1>
-            <p class="slide-description">Cultivating executive talent that combines global business acumen with deep regional understanding and values.</p>
+            <div class="slide-tag">PRO & Government Relations</div>
+            <h1 class="slide-headline">Navigating Government Processes</h1>
+            <p class="slide-description">Streamlined visa, licensing, and documentation support to keep your business compliant.</p>
+            <ul class="service-list">
+                <li>Visa and work permit processing</li>
+                <li>Government documentation support</li>
+                <li>Licensing and renewal assistance</li>
+            </ul>
         </div>
         
-        <!-- Slide 5 -->
+        <!-- Slide 5: IP & Brand Services -->
         <div class="slide">
-            <div class="slide-tag">Impact</div>
-            <h1 class="slide-headline">Sustainable Business for Lasting Legacy</h1>
-            <p class="slide-description">Creating value that extends beyond financial returns to social impact, environmental stewardship, and regional development.</p>
+            <div class="slide-tag">Intellectual Property</div>
+            <h1 class="slide-headline">Protecting Your Brand & Assets</h1>
+            <p class="slide-description">Safeguard your intellectual property with comprehensive registration and strategic advisory services.</p>
+            <ul class="service-list">
+                <li>Trademark registration and protection</li>
+                <li>Business analysis and strategic advisory</li>
+                <li>Market entry strategy development</li>
+            </ul>
+        </div>
+        
+        <!-- Slide 6: Target Clients -->
+        <div class="slide">
+            <div class="slide-tag">Our Clients</div>
+            <h1 class="slide-headline">Who We Serve</h1>
+            <p class="slide-description">We partner with diverse businesses seeking growth in the Middle East region.</p>
+            <ul class="service-list">
+                <li>Startups and SMEs</li>
+                <li>Foreign investors entering Saudi Arabia</li>
+                <li>Corporates seeking regional expansion</li>
+            </ul>
+        </div>
+        
+        <!-- Slide 7: Global Presence -->
+        <div class="slide">
+            <div class="slide-tag">Global Presence</div>
+            <h1 class="slide-headline">Local Expertise, Global Network</h1>
+            <p class="slide-description">With offices across key markets, we connect businesses to opportunities in Saudi Arabia and beyond.</p>
+            <ul class="service-list">
+                <li>Saudi Arabia – Jeddah, Riyadh, Dammam</li>
+                <li>United Arab Emirates</li>
+                <li>India, UK, China</li>
+            </ul>
+        </div>
+        
+        <!-- Slide 8: Key Highlights -->
+        <div class="slide">
+            <div class="slide-tag">Why Choose Us</div>
+            <h1 class="slide-headline">Your Trusted Business Partner</h1>
+            <p class="slide-description">We simplify complex processes so you can focus on growing your business.</p>
+            <ul class="service-list">
+                <li>One-stop solution for company formation and compliance</li>
+                <li>Expertise in Saudi Arabia's regulatory environment</li>
+                <li>Trusted partner for entrepreneurs and international businesses</li>
+            </ul>
         </div>
     </div>
 
@@ -297,24 +590,70 @@
             const progressBar = document.getElementById('progressBar');
             const currentSlideEl = document.getElementById('currentSlide');
             const totalSlidesEl = document.getElementById('totalSlides');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const playBtn = document.getElementById('playBtn');
+            const pauseOverlay = document.getElementById('pauseOverlay');
+            const slidesContainer = document.getElementById('slidesContainer');
+            const navDots = document.getElementById('navDots');
+            const header = document.querySelector('.header');
             
             let currentIndex = 0;
             const totalSlides = slides.length;
-            const slideDuration = 4000; // 4 seconds
+            const slideDuration = 5000; // 5 seconds
+            let slideInterval;
+            let isPaused = false;
+            let hideHeaderTimeout;
             
             // Set total slides count
             totalSlidesEl.textContent = totalSlides;
             
-            // Initialize progress bar
-            progressBar.style.width = '0%';
+            // Initialize navigation dots
+            function initNavDots() {
+                navDots.innerHTML = '';
+                for (let i = 0; i < totalSlides; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'nav-dot';
+                    dot.dataset.index = i;
+                    dot.dataset.title = getSlideTitle(i);
+                    
+                    if (i === currentIndex) {
+                        dot.classList.add('active');
+                    }
+                    
+                    dot.addEventListener('click', function() {
+                        goToSlide(parseInt(this.dataset.index));
+                    });
+                    
+                    navDots.appendChild(dot);
+                }
+            }
             
-            // Function to show next slide
-            function showNextSlide() {
+            // Get slide title for dot tooltip
+            function getSlideTitle(index) {
+                const slide = slides[index];
+                const tagElement = slide.querySelector('.slide-tag');
+                return tagElement ? tagElement.textContent : `Slide ${index + 1}`;
+            }
+            
+            // Update navigation dots
+            function updateNavDots() {
+                const dots = document.querySelectorAll('.nav-dot');
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Function to show a specific slide
+            function goToSlide(index) {
                 // Hide current slide
                 slides[currentIndex].classList.remove('active');
                 
                 // Update index
-                currentIndex = (currentIndex + 1) % totalSlides;
+                currentIndex = (index + totalSlides) % totalSlides;
                 
                 // Show next slide
                 slides[currentIndex].classList.add('active');
@@ -322,28 +661,189 @@
                 // Update counter
                 currentSlideEl.textContent = currentIndex + 1;
                 
+                // Update navigation dots
+                updateNavDots();
+                
                 // Reset and animate progress bar
+                resetProgressBar();
+                
+                // If slideshow is playing, restart interval
+                if (!isPaused) {
+                    restartInterval();
+                }
+            }
+            
+            // Function to show next slide
+            function showNextSlide() {
+                goToSlide(currentIndex + 1);
+            }
+            
+            // Function to show previous slide
+            function showPrevSlide() {
+                goToSlide(currentIndex - 1);
+            }
+            
+            // Reset progress bar
+            function resetProgressBar() {
                 progressBar.style.transition = 'none';
                 progressBar.style.width = '0%';
                 
                 setTimeout(() => {
-                    progressBar.style.transition = `width ${slideDuration}ms linear`;
-                    progressBar.style.width = '100%';
+                    if (!isPaused) {
+                        progressBar.style.transition = `width ${slideDuration}ms linear`;
+                        progressBar.style.width = '100%';
+                    }
                 }, 10);
             }
             
             // Start the slideshow
             function startSlideshow() {
+                isPaused = false;
+                pauseBtn.style.display = 'block';
+                playBtn.style.display = 'none';
+                pauseOverlay.classList.remove('active');
+                document.body.classList.remove('slideshow-paused');
+                
                 // Initial progress bar animation
                 progressBar.style.transition = `width ${slideDuration}ms linear`;
                 progressBar.style.width = '100%';
                 
+                // Clear any existing interval
+                if (slideInterval) {
+                    clearInterval(slideInterval);
+                }
+                
                 // Set interval for slide changes
-                setInterval(showNextSlide, slideDuration);
+                slideInterval = setInterval(showNextSlide, slideDuration);
             }
             
-            // Start the continuous slideshow
-            startSlideshow();
+            // Pause the slideshow
+            function pauseSlideshow() {
+                isPaused = true;
+                pauseBtn.style.display = 'none';
+                playBtn.style.display = 'block';
+                pauseOverlay.classList.add('active');
+                document.body.classList.add('slideshow-paused');
+                
+                // Clear the interval
+                if (slideInterval) {
+                    clearInterval(slideInterval);
+                    slideInterval = null;
+                }
+                
+                // Pause progress bar animation
+                const computedStyle = window.getComputedStyle(progressBar);
+                const width = computedStyle.getPropertyValue('width');
+                progressBar.style.transition = 'none';
+                progressBar.style.width = width;
+            }
+            
+            // Restart interval after manual navigation
+            function restartInterval() {
+                if (slideInterval) {
+                    clearInterval(slideInterval);
+                }
+                
+                slideInterval = setInterval(showNextSlide, slideDuration);
+            }
+            
+            // Initialize slideshow
+            function initSlideshow() {
+                initNavDots();
+                startSlideshow();
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'ArrowRight' || e.key === ' ') {
+                        showNextSlide();
+                    } else if (e.key === 'ArrowLeft') {
+                        showPrevSlide();
+                    } else if (e.key === 'p' || e.key === 'P') {
+                        if (isPaused) {
+                            startSlideshow();
+                        } else {
+                            pauseSlideshow();
+                        }
+                    }
+                });
+                
+                // Pause/Play button events
+                pauseBtn.addEventListener('click', pauseSlideshow);
+                playBtn.addEventListener('click', startSlideshow);
+                
+                // Pause on hover over slides container
+                slidesContainer.addEventListener('mouseenter', function() {
+                    if (!isPaused) {
+                        // Only show pause overlay briefly on hover
+                        pauseOverlay.style.opacity = '0.3';
+                        setTimeout(() => {
+                            pauseOverlay.style.opacity = '0';
+                        }, 1500);
+                    }
+                });
+                
+                // Auto-hide header when not hovering
+                let lastScrollTop = 0;
+                window.addEventListener('scroll', function() {
+                    const st = window.pageYOffset || document.documentElement.scrollTop;
+                    if (st > lastScrollTop) {
+                        // Scrolling down
+                        header.classList.add('hidden');
+                    } else {
+                        // Scrolling up
+                        header.classList.remove('hidden');
+                    }
+                    lastScrollTop = st <= 0 ? 0 : st;
+                });
+                
+                // Show header on hover
+                header.addEventListener('mouseenter', function() {
+                    header.classList.remove('hidden');
+                    clearTimeout(hideHeaderTimeout);
+                });
+                
+                // Hide header after delay when not hovering
+                slidesContainer.addEventListener('mousemove', function(e) {
+                    if (e.clientY < 100) {
+                        header.classList.remove('hidden');
+                        clearTimeout(hideHeaderTimeout);
+                    } else {
+                        hideHeaderTimeout = setTimeout(() => {
+                            header.classList.add('hidden');
+                        }, 3000);
+                    }
+                });
+                
+                // Touch swipe support for mobile
+                let touchStartX = 0;
+                let touchEndX = 0;
+                
+                slidesContainer.addEventListener('touchstart', function(e) {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+                
+                slidesContainer.addEventListener('touchend', function(e) {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+                
+                function handleSwipe() {
+                    const swipeThreshold = 50;
+                    
+                    if (touchEndX < touchStartX - swipeThreshold) {
+                        // Swipe left - next slide
+                        showNextSlide();
+                    }
+                    
+                    if (touchEndX > touchStartX + swipeThreshold) {
+                        // Swipe right - previous slide
+                        showPrevSlide();
+                    }
+                }
+            }
+            
+            // Start the slideshow
+            initSlideshow();
         });
     </script>
 </body>

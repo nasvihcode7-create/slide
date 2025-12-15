@@ -161,64 +161,6 @@
             transition: width 4s linear;
         }
         
-        /* Navigation Dots - Hidden until hover */
-        .nav-dots {
-            position: fixed;
-            right: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 200;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px 10px;
-            border-radius: 20px;
-            backdrop-filter: blur(20px);
-        }
-        
-        .slides-container:hover .nav-dots,
-        .nav-dots:hover {
-            opacity: 1;
-        }
-        
-        .nav-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: var(--apple-gray-2);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .nav-dot:hover {
-            transform: scale(1.3);
-            background-color: var(--apple-gray-3);
-        }
-        
-        .nav-dot.active {
-            background-color: var(--apple-black);
-            transform: scale(1.2);
-        }
-        
-        .nav-dot:hover::after {
-            content: attr(data-title);
-            position: absolute;
-            right: 25px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: var(--apple-black);
-            color: var(--apple-white);
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-        
         /* Pause notification - bottom center */
         .pause-notification {
             position: fixed;
@@ -244,6 +186,85 @@
         .pause-notification.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
+        }
+        
+        /* Minimal slide selector - appears only when paused */
+        .slide-selector {
+            position: fixed;
+            bottom: 160px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            display: flex;
+            gap: 8px;
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .slide-selector.show {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .selector-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--apple-gray-2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .selector-dot:hover {
+            transform: scale(1.3);
+            background-color: var(--apple-gray-3);
+        }
+        
+        .selector-dot.active {
+            background-color: var(--apple-black);
+            transform: scale(1.2);
+        }
+        
+        /* Resume button - minimal */
+        .resume-btn {
+            position: fixed;
+            bottom: 220px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--apple-white);
+            color: var(--apple-gray-3);
+            border: none;
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .resume-btn.show {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .resume-btn:hover {
+            background-color: var(--apple-gray-1);
         }
         
         /* Responsive */
@@ -299,22 +320,22 @@
                 bottom: 24px;
             }
             
-            .nav-dots {
-                right: 20px;
-                padding: 10px 8px;
-                gap: 12px;
-            }
-            
-            .nav-dot:hover::after {
-                font-size: 10px;
-                padding: 4px 8px;
-                right: 20px;
-            }
-            
             .pause-notification {
                 bottom: 80px;
                 padding: 10px 20px;
                 font-size: 14px;
+            }
+            
+            .slide-selector {
+                bottom: 130px;
+                padding: 10px 16px;
+                gap: 6px;
+            }
+            
+            .resume-btn {
+                bottom: 180px;
+                padding: 8px 20px;
+                font-size: 13px;
             }
         }
         
@@ -335,21 +356,27 @@
                 font-size: 16px;
             }
             
-            .nav-dots {
-                right: 15px;
-                padding: 8px 6px;
-                gap: 10px;
-            }
-            
-            .nav-dot {
-                width: 8px;
-                height: 8px;
-            }
-            
             .pause-notification {
                 bottom: 60px;
                 padding: 8px 16px;
                 font-size: 13px;
+            }
+            
+            .slide-selector {
+                bottom: 100px;
+                padding: 8px 12px;
+                gap: 5px;
+            }
+            
+            .selector-dot {
+                width: 8px;
+                height: 8px;
+            }
+            
+            .resume-btn {
+                bottom: 140px;
+                padding: 6px 16px;
+                font-size: 12px;
             }
         }
     </style>
@@ -370,6 +397,17 @@
         Slideshow Paused
     </div>
     
+    <!-- Slide selector - appears only when paused -->
+    <div class="slide-selector" id="slideSelector">
+        <!-- Dots will be generated by JavaScript -->
+    </div>
+    
+    <!-- Resume button - appears only when paused -->
+    <button class="resume-btn" id="resumeBtn">
+        <i class="fas fa-play"></i>
+        Resume Slideshow
+    </button>
+    
     <!-- Progress indicator -->
     <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
@@ -378,11 +416,6 @@
     <!-- Slide counter -->
     <div class="slide-counter">
         <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
-    </div>
-    
-    <!-- Navigation Dots -->
-    <div class="nav-dots" id="navDots">
-        <!-- Dots will be generated by JavaScript -->
     </div>
     
     <!-- Slides container -->
@@ -451,27 +484,27 @@
             const currentSlideEl = document.getElementById('currentSlide');
             const totalSlidesEl = document.getElementById('totalSlides');
             const pauseNotification = document.getElementById('pauseNotification');
+            const slideSelector = document.getElementById('slideSelector');
+            const resumeBtn = document.getElementById('resumeBtn');
             const slidesContainer = document.getElementById('slidesContainer');
-            const navDots = document.getElementById('navDots');
             
             let currentIndex = 0;
             const totalSlides = slides.length;
             const slideDuration = 5000; // 5 seconds
             let slideInterval;
             let isPaused = false;
-            let pauseTimeout;
+            let notificationTimeout;
             
             // Set total slides count
             totalSlidesEl.textContent = totalSlides;
             
-            // Initialize navigation dots
-            function initNavDots() {
-                navDots.innerHTML = '';
+            // Initialize slide selector dots
+            function initSlideSelector() {
+                slideSelector.innerHTML = '';
                 for (let i = 0; i < totalSlides; i++) {
                     const dot = document.createElement('div');
-                    dot.className = 'nav-dot';
+                    dot.className = 'selector-dot';
                     dot.dataset.index = i;
-                    dot.dataset.title = getSlideTitle(i);
                     
                     if (i === currentIndex) {
                         dot.classList.add('active');
@@ -479,22 +512,17 @@
                     
                     dot.addEventListener('click', function() {
                         goToSlide(parseInt(this.dataset.index));
+                        // Extend pause state when clicking a dot
+                        extendPauseState();
                     });
                     
-                    navDots.appendChild(dot);
+                    slideSelector.appendChild(dot);
                 }
             }
             
-            // Get slide title for dot tooltip
-            function getSlideTitle(index) {
-                const slide = slides[index];
-                const tagElement = slide.querySelector('.slide-tag');
-                return tagElement ? tagElement.textContent : `Slide ${index + 1}`;
-            }
-            
-            // Update navigation dots
-            function updateNavDots() {
-                const dots = document.querySelectorAll('.nav-dot');
+            // Update slide selector dots
+            function updateSlideSelector() {
+                const dots = document.querySelectorAll('.selector-dot');
                 dots.forEach((dot, index) => {
                     if (index === currentIndex) {
                         dot.classList.add('active');
@@ -518,8 +546,8 @@
                 // Update counter
                 currentSlideEl.textContent = currentIndex + 1;
                 
-                // Update navigation dots
-                updateNavDots();
+                // Update slide selector
+                updateSlideSelector();
                 
                 // Reset and animate progress bar
                 resetProgressBar();
@@ -548,25 +576,60 @@
                 }, 10);
             }
             
-            // Show pause notification
-            function showPauseNotification() {
+            // Show pause notification and controls
+            function showPauseState() {
                 // Clear any existing timeout
-                if (pauseTimeout) {
-                    clearTimeout(pauseTimeout);
+                if (notificationTimeout) {
+                    clearTimeout(notificationTimeout);
                 }
                 
                 // Show notification
                 pauseNotification.classList.add('show');
                 
-                // Auto-hide after 3 seconds
-                pauseTimeout = setTimeout(() => {
+                // Show slide selector
+                slideSelector.classList.add('show');
+                
+                // Show resume button
+                resumeBtn.classList.add('show');
+                
+                // Auto-hide notification after 3 seconds
+                notificationTimeout = setTimeout(() => {
                     pauseNotification.classList.remove('show');
                 }, 3000);
+            }
+            
+            // Extend pause state when interacting with controls
+            function extendPauseState() {
+                if (!isPaused) return;
+                
+                // Show notification again
+                pauseNotification.classList.add('show');
+                
+                // Clear existing timeout and set new one
+                if (notificationTimeout) {
+                    clearTimeout(notificationTimeout);
+                }
+                
+                notificationTimeout = setTimeout(() => {
+                    pauseNotification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Hide all pause controls
+            function hidePauseControls() {
+                pauseNotification.classList.remove('show');
+                slideSelector.classList.remove('show');
+                resumeBtn.classList.remove('show');
+                
+                if (notificationTimeout) {
+                    clearTimeout(notificationTimeout);
+                }
             }
             
             // Start the slideshow
             function startSlideshow() {
                 isPaused = false;
+                hidePauseControls();
                 
                 // Clear any existing interval
                 if (slideInterval) {
@@ -584,8 +647,8 @@
             function pauseSlideshow() {
                 isPaused = true;
                 
-                // Show pause notification
-                showPauseNotification();
+                // Show pause controls
+                showPauseState();
                 
                 // Clear the interval
                 if (slideInterval) {
@@ -600,15 +663,6 @@
                 progressBar.style.width = width;
             }
             
-            // Toggle pause/play
-            function togglePausePlay() {
-                if (isPaused) {
-                    startSlideshow();
-                } else {
-                    pauseSlideshow();
-                }
-            }
-            
             // Restart interval after manual navigation
             function restartInterval() {
                 if (slideInterval) {
@@ -620,38 +674,50 @@
             
             // Initialize slideshow
             function initSlideshow() {
-                initNavDots();
+                initSlideSelector();
                 startSlideshow();
                 
-                // Click anywhere to pause
-                document.addEventListener('click', function(e) {
-                    // Don't pause if clicking on navigation dots
-                    if (!e.target.closest('.nav-dots') && !isPaused) {
+                // Click anywhere on slide to pause
+                slidesContainer.addEventListener('click', function(e) {
+                    // Don't trigger if clicking on controls
+                    if (!e.target.closest('.pause-notification') && 
+                        !e.target.closest('.slide-selector') && 
+                        !e.target.closest('.resume-btn') &&
+                        !isPaused) {
                         pauseSlideshow();
                     }
                 });
                 
-                // Click anywhere to resume when paused
-                document.addEventListener('click', function(e) {
-                    if (isPaused && !e.target.closest('.nav-dots')) {
-                        startSlideshow();
-                    }
+                // Resume button click
+                resumeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    startSlideshow();
                 });
                 
                 // Space bar to toggle pause/play
                 document.addEventListener('keydown', function(e) {
                     if (e.key === ' ' || e.key === 'Spacebar') {
-                        togglePausePlay();
+                        if (isPaused) {
+                            startSlideshow();
+                        } else {
+                            pauseSlideshow();
+                        }
                         e.preventDefault();
                     }
                     
                     // Arrow keys for navigation (works even when paused)
                     if (e.key === 'ArrowRight') {
                         showNextSlide();
+                        if (isPaused) {
+                            extendPauseState();
+                        }
                     }
                     
                     if (e.key === 'ArrowLeft') {
                         goToSlide(currentIndex - 1);
+                        if (isPaused) {
+                            extendPauseState();
+                        }
                     }
                 });
                 
@@ -674,21 +740,19 @@
                     if (touchEndX < touchStartX - swipeThreshold) {
                         // Swipe left - next slide
                         showNextSlide();
+                        if (isPaused) {
+                            extendPauseState();
+                        }
                     }
                     
                     if (touchEndX > touchStartX + swipeThreshold) {
                         // Swipe right - previous slide
                         goToSlide(currentIndex - 1);
+                        if (isPaused) {
+                            extendPauseState();
+                        }
                     }
                 }
-                
-                // Auto-hide pause notification when mouse moves
-                document.addEventListener('mousemove', function() {
-                    if (isPaused && pauseNotification.classList.contains('show')) {
-                        // Extend the timeout when mouse moves
-                        showPauseNotification();
-                    }
-                });
             }
             
             // Start the slideshow

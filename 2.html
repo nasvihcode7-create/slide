@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARAB DREAMS</title>
+    <title>ARAB DREAMS - Company Overview</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -15,6 +15,8 @@
             --apple-gray-2: #86868B;
             --apple-gray-3: #424245;
             --apple-blue: #0071E3;
+            --control-bg: rgba(255, 255, 255, 0.9);
+            --control-hover: rgba(0, 0, 0, 0.05);
         }
         
         * {
@@ -42,7 +44,7 @@
             align-items: center;
             justify-content: space-between;
             z-index: 100;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: var(--control-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
@@ -54,7 +56,7 @@
         }
         
         .logo {
-            height: 62px;
+            height: 32px; /* Adjusted for better proportion */
             width: auto;
         }
         
@@ -70,7 +72,7 @@
             font-weight: 400;
         }
         
-        /* Slides container */
+        /* Slides container - key for hover controls */
         .slides-container {
             height: 100vh;
             width: 100vw;
@@ -136,10 +138,11 @@
             font-size: 14px;
             color: var(--apple-gray-2);
             z-index: 100;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--control-bg);
             padding: 8px 16px;
             border-radius: 20px;
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
         
         /* Progress indicator */
@@ -157,7 +160,78 @@
             height: 100%;
             width: 0%;
             background-color: var(--apple-black);
-            transition: width 4s linear;
+        }
+
+        /* --- New Controls Styling --- */
+
+        /* Pause/Play Button */
+        #playPauseBtn {
+            position: fixed;
+            bottom: 40px;
+            left: 170px; /* Right of the progress bar */
+            z-index: 100;
+            background: var(--control-bg);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease, background-color 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #playPauseBtn:hover {
+            background-color: var(--control-hover);
+        }
+
+        #playPauseBtn svg {
+            fill: var(--apple-black);
+            height: 16px;
+            width: 16px;
+        }
+        
+        /* Slide Navigation Menu (Dots) */
+        #slideNavigation {
+            position: fixed;
+            top: 50%;
+            left: 40px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 10px 0; /* Area for hover */
+        }
+
+        .slide-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--apple-gray-2);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            position: relative;
+        }
+
+        .slide-dot.active {
+            background-color: var(--apple-blue);
+        }
+
+        .slide-dot:hover {
+            background-color: var(--apple-black);
+            transform: scale(1.2);
+        }
+
+        /* Hover effect to show controls */
+        .slides-container:hover #playPauseBtn,
+        .slides-container:hover #slideNavigation {
+            opacity: 1;
         }
         
         /* Responsive */
@@ -212,6 +286,22 @@
                 right: 24px;
                 bottom: 24px;
             }
+            
+            #playPauseBtn {
+                left: 150px;
+                bottom: 32px;
+                width: 32px;
+                height: 32px;
+            }
+
+            #slideNavigation {
+                left: 20px;
+            }
+
+            #playPauseBtn svg {
+                height: 14px;
+                width: 14px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -234,115 +324,224 @@
     </style>
 </head>
 <body>
-    <!-- Minimal header -->
     <div class="header">
         <div class="logo-container">
             <img src="https://arabdreams.com/wp-content/uploads/2024/11/arab-1.png" alt="ARAB DREAMS" class="logo">
-            <div class="company-name"></div>
+            <div class="company-name">ArabDreams.com</div>
         </div>
-        <div class="hours"></div>
+        <div class="hours">Professional Business Consultancy</div>
     </div>
     
-    <!-- Progress indicator -->
     <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
     </div>
+
+    <button id="playPauseBtn" title="Pause Slideshow">
+        <svg id="pauseIcon" viewBox="0 0 24 24" style="display: block;">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+        </svg>
+        <svg id="playIcon" viewBox="0 0 24 24" style="display: none;">
+            <path d="M8 5v14l11-7z"/>
+        </svg>
+    </button>
     
-    <!-- Slide counter -->
     <div class="slide-counter">
-        <span id="currentSlide">1</span> / <span id="totalSlides">5</span>
+        <span id="currentSlide">1</span> / <span id="totalSlides">0</span>
     </div>
+
+    <div id="slideNavigation">
+        </div>
     
-    <!-- Slides container -->
     <div class="slides-container">
-        <!-- Slide 1 -->
-        <div class="slide active">
-            <div class="slide-tag">Vision</div>
-            <h1 class="slide-headline">Strategic Consulting for the Arab Region</h1>
-            <p class="slide-description">Transforming regional ambitions into sustainable business success through deep market intelligence and cultural insight.</p>
+        <div class="slide active" data-title="Overview">
+            <div class="slide-tag">Company Overview</div>
+            <h1 class="slide-headline">Helping Businesses Establish and Grow in the Middle East</h1>
+            <p class="slide-description">Professional business consultancy and support focused on helping entrepreneurs, startups, and corporations succeed in Saudi Arabia and the wider region.</p>
         </div>
         
-        <!-- Slide 2 -->
-        <div class="slide">
-            <div class="slide-tag">Transformation</div>
-            <h1 class="slide-headline">Digital Innovation & Future Readiness</h1>
-            <p class="slide-description">Integrating cutting-edge technology with traditional business wisdom to create resilient, forward-looking organizations.</p>
+        <div class="slide" data-title="Business Setup">
+            <div class="slide-tag">Core Service</div>
+            <h1 class="slide-headline">End-to-End Business Setup & Company Formation</h1>
+            <p class="slide-description">Full legal and government formalities assistance for LLC, branch, or other entity registration tailored to Saudi Arabia's market requirements.</p>
         </div>
         
-        <!-- Slide 3 -->
-        <div class="slide">
-            <div class="slide-tag">Growth</div>
-            <h1 class="slide-headline">Market Entry & Expansion Strategy</h1>
-            <p class="slide-description">Navigating the complex landscapes of Arab markets with precision, cultural sensitivity, and strategic foresight.</p>
+        <div class="slide" data-title="Business Support">
+            <div class="slide-tag">Operational Excellence</div>
+            <h1 class="slide-headline">Comprehensive Business Support & Compliance</h1>
+            <p class="slide-description">Offering accounting, bookkeeping, audit, tax compliance, corporate governance, and corporate restructuring services.</p>
         </div>
         
-        <!-- Slide 4 -->
-        <div class="slide">
-            <div class="slide-tag">Leadership</div>
-            <h1 class="slide-headline">Developing Arab Business Leaders</h1>
-            <p class="slide-description">Cultivating executive talent that combines global business acumen with deep regional understanding and values.</p>
+        <div class="slide" data-title="PRO Services">
+            <div class="slide-tag">Government Relations</div>
+            <h1 class="slide-headline">PRO Services & Government Documentation Support</h1>
+            <p class="slide-description">Streamlining visa and work permit processing, government documentation, and essential licensing support.</p>
         </div>
         
-        <!-- Slide 5 -->
-        <div class="slide">
-            <div class="slide-tag">Impact</div>
-            <h1 class="slide-headline">Sustainable Business for Lasting Legacy</h1>
-            <p class="slide-description">Creating value that extends beyond financial returns to social impact, environmental stewardship, and regional development.</p>
+        <div class="slide" data-title="Target Clients">
+            <div class="slide-tag">Who We Serve</div>
+            <h1 class="slide-headline">Trusted Partner for Global & Regional Growth</h1>
+            <p class="slide-description">Serving Startups, SMEs, Foreign investors entering Saudi Arabia, and Corporates seeking rapid regional expansion.</p>
+        </div>
+
+        <div class="slide" data-title="Key Highlights">
+            <div class="slide-tag">The Arab Dreams Advantage</div>
+            <h1 class="slide-headline">One-Stop Solution with Saudi Regulatory Expertise</h1>
+            <p class="slide-description">Your trusted partner providing a one-stop solution for company formation, compliance, operational support, and navigating Saudi Arabia’s regulatory environment.</p>
+        </div>
+        
+        <div class="slide" data-title="Global Reach">
+            <div class="slide-tag">Global Presence</div>
+            <h1 class="slide-headline">Connecting You to Key Global Hubs</h1>
+            <p class="slide-description">Located strategically in Saudi Arabia (Jeddah, Riyadh, Dammam), UAE, India, UK, and China to support your international endeavors.</p>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const slidesContainer = document.querySelector('.slides-container');
             const slides = document.querySelectorAll('.slide');
             const progressBar = document.getElementById('progressBar');
             const currentSlideEl = document.getElementById('currentSlide');
             const totalSlidesEl = document.getElementById('totalSlides');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const pauseIcon = document.getElementById('pauseIcon');
+            const playIcon = document.getElementById('playIcon');
+            const slideNavigation = document.getElementById('slideNavigation');
             
             let currentIndex = 0;
             const totalSlides = slides.length;
-            const slideDuration = 4000; // 4 seconds
-            
+            const slideDuration = 6000; // Increased to 6 seconds for better readability
+            let slideshowInterval;
+            let isPaused = false;
+
             // Set total slides count
             totalSlidesEl.textContent = totalSlides;
-            
-            // Initialize progress bar
-            progressBar.style.width = '0%';
-            
-            // Function to show next slide
-            function showNextSlide() {
-                // Hide current slide
-                slides[currentIndex].classList.remove('active');
-                
-                // Update index
-                currentIndex = (currentIndex + 1) % totalSlides;
-                
-                // Show next slide
-                slides[currentIndex].classList.add('active');
-                
+
+            // --- Slide Navigation Dots Setup ---
+            function createNavigationDots() {
+                slides.forEach((slide, index) => {
+                    const dot = document.createElement('div');
+                    dot.classList.add('slide-dot');
+                    dot.setAttribute('data-index', index);
+                    dot.setAttribute('title', slide.getAttribute('data-title')); // Tooltip on hover
+                    dot.addEventListener('click', () => {
+                        goToSlide(index);
+                        pauseSlideshow(); // Pause when a manual jump occurs
+                    });
+                    slideNavigation.appendChild(dot);
+                });
+            }
+
+            // --- Core Slide Change Logic ---
+            function updateSlide(index) {
+                // Remove 'active' from all slides and dots
+                slides.forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('.slide-dot').forEach(d => d.classList.remove('active'));
+
+                // Set 'active' on current slide and dot
+                slides[index].classList.add('active');
+                document.querySelector(`.slide-dot[data-index="${index}"]`).classList.add('active');
+
                 // Update counter
-                currentSlideEl.textContent = currentIndex + 1;
-                
+                currentSlideEl.textContent = index + 1;
+                currentIndex = index;
+            }
+
+            function startProgressBarAnimation() {
                 // Reset and animate progress bar
                 progressBar.style.transition = 'none';
                 progressBar.style.width = '0%';
                 
+                // Use a small timeout to force the transition reset
                 setTimeout(() => {
                     progressBar.style.transition = `width ${slideDuration}ms linear`;
                     progressBar.style.width = '100%';
                 }, 10);
             }
             
-            // Start the slideshow
+            function showNextSlide() {
+                const nextIndex = (currentIndex + 1) % totalSlides;
+                updateSlide(nextIndex);
+                startProgressBarAnimation();
+            }
+
+            function goToSlide(index) {
+                if (index >= 0 && index < totalSlides && index !== currentIndex) {
+                    updateSlide(index);
+                    startProgressBarAnimation();
+                }
+            }
+
+            // --- Slideshow Control Logic ---
             function startSlideshow() {
-                // Initial progress bar animation
-                progressBar.style.transition = `width ${slideDuration}ms linear`;
-                progressBar.style.width = '100%';
+                if (slideshowInterval) clearInterval(slideshowInterval);
+                isPaused = false;
+                pauseIcon.style.display = 'block';
+                playIcon.style.display = 'none';
+
+                // Ensure initial slide is shown and progress bar starts
+                updateSlide(currentIndex);
+                startProgressBarAnimation();
                 
                 // Set interval for slide changes
-                setInterval(showNextSlide, slideDuration);
+                slideshowInterval = setInterval(showNextSlide, slideDuration);
             }
-            
-            // Start the continuous slideshow
+
+            function pauseSlideshow() {
+                if (slideshowInterval) clearInterval(slideshowInterval);
+                isPaused = true;
+                pauseIcon.style.display = 'none';
+                playIcon.style.display = 'block';
+
+                // Stop progress bar animation by calculating current width
+                const currentWidth = progressBar.offsetWidth;
+                const containerWidth = progressBar.parentElement.offsetWidth;
+                const percentage = (currentWidth / containerWidth) * 100;
+
+                // Set width without transition
+                progressBar.style.transition = 'none';
+                progressBar.style.width = `${percentage}%`;
+            }
+
+            function toggleSlideshow() {
+                if (isPaused) {
+                    // Resume logic
+                    isPaused = false;
+                    pauseIcon.style.display = 'block';
+                    playIcon.style.display = 'none';
+
+                    // Calculate remaining time and start new progress bar
+                    const currentWidth = progressBar.offsetWidth;
+                    const containerWidth = progressBar.parentElement.offsetWidth;
+                    const remainingPercentage = 100 - (currentWidth / containerWidth) * 100;
+                    
+                    const remainingDuration = (remainingPercentage / 100) * slideDuration;
+
+                    progressBar.style.transition = 'none';
+                    
+                    // Use a timeout to apply the width and start the transition
+                    setTimeout(() => {
+                        progressBar.style.transition = `width ${remainingDuration}ms linear`;
+                        progressBar.style.width = '100%';
+                    }, 10);
+                    
+                    // Set interval to move to the next slide after the remaining duration
+                    setTimeout(() => {
+                        showNextSlide();
+                        // Then set the regular interval
+                        slideshowInterval = setInterval(showNextSlide, slideDuration);
+                    }, remainingDuration);
+
+                } else {
+                    pauseSlideshow();
+                }
+            }
+
+            // --- Event Listeners and Initialization ---
+            playPauseBtn.addEventListener('click', toggleSlideshow);
+
+            // Start everything
+            createNavigationDots();
             startSlideshow();
         });
     </script>

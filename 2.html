@@ -77,6 +77,7 @@
             width: 100vw;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         
         /* Individual slide */
@@ -141,6 +142,7 @@
             padding: 8px 16px;
             border-radius: 20px;
             backdrop-filter: blur(20px);
+            transition: opacity 0.3s ease;
         }
         
         /* Progress indicator */
@@ -152,6 +154,7 @@
             height: 1px;
             background-color: rgba(0, 0, 0, 0.1);
             z-index: 100;
+            transition: opacity 0.3s ease;
         }
         
         .progress-bar {
@@ -161,91 +164,37 @@
             transition: width 4s linear;
         }
         
-        /* Pause notification - bottom center */
-        .pause-notification {
+        /* Pause controls container - appears for 3 seconds only */
+        .pause-controls {
             position: fixed;
             bottom: 100px;
             left: 50%;
             transform: translateX(-50%) translateY(20px);
-            background-color: var(--apple-white);
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--apple-gray-3);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            gap: 20px;
             z-index: 300;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
         
-        .pause-notification.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-        
-        /* Resume button - appears when paused */
-        .resume-btn {
-            position: fixed;
-            bottom: 160px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: var(--apple-white);
-            color: var(--apple-gray-3);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            z-index: 300;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(20px);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .resume-btn.show {
+        .pause-controls.show {
             opacity: 1;
             pointer-events: all;
             transform: translateX(-50%) translateY(0);
         }
         
-        .resume-btn:hover {
-            background-color: var(--apple-gray-1);
-        }
-        
-        /* Slide selector - appears when paused */
+        /* Slide selector */
         .slide-selector {
-            position: fixed;
-            bottom: 220px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
             display: flex;
-            gap: 8px;
-            z-index: 300;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            padding: 12px 20px;
+            gap: 10px;
             background: rgba(255, 255, 255, 0.9);
+            padding: 12px 20px;
             border-radius: 12px;
             backdrop-filter: blur(20px);
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .slide-selector.show {
-            opacity: 1;
-            pointer-events: all;
-            transform: translateX(-50%) translateY(0);
         }
         
         .selector-dot {
@@ -265,6 +214,44 @@
         .selector-dot.active {
             background-color: var(--apple-black);
             transform: scale(1.2);
+        }
+        
+        /* Resume button */
+        .resume-btn {
+            background: var(--apple-white);
+            color: var(--apple-gray-3);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .resume-btn:hover {
+            background-color: var(--apple-gray-1);
+        }
+        
+        /* Pause notification */
+        .pause-notification {
+            background: var(--apple-white);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--apple-gray-3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+            margin-bottom: 10px;
         }
         
         /* Responsive */
@@ -320,22 +307,24 @@
                 bottom: 24px;
             }
             
-            .pause-notification {
+            .pause-controls {
                 bottom: 80px;
+                gap: 15px;
+            }
+            
+            .pause-notification {
                 padding: 10px 20px;
                 font-size: 14px;
             }
             
             .resume-btn {
-                bottom: 130px;
                 padding: 10px 20px;
                 font-size: 14px;
             }
             
             .slide-selector {
-                bottom: 180px;
                 padding: 10px 16px;
-                gap: 6px;
+                gap: 8px;
             }
         }
         
@@ -356,22 +345,24 @@
                 font-size: 16px;
             }
             
-            .pause-notification {
+            .pause-controls {
                 bottom: 60px;
+                gap: 10px;
+            }
+            
+            .pause-notification {
                 padding: 8px 16px;
                 font-size: 13px;
             }
             
             .resume-btn {
-                bottom: 100px;
                 padding: 8px 16px;
                 font-size: 13px;
             }
             
             .slide-selector {
-                bottom: 140px;
                 padding: 8px 12px;
-                gap: 5px;
+                gap: 6px;
             }
             
             .selector-dot {
@@ -391,21 +382,19 @@
         <div class="hours"></div>
     </div>
     
-    <!-- Pause notification -->
-    <div class="pause-notification" id="pauseNotification">
-        <i class="fas fa-pause"></i>
-        Slideshow Paused
-    </div>
-    
-    <!-- Resume button - appears when paused -->
-    <button class="resume-btn" id="resumeBtn">
-        <i class="fas fa-play"></i>
-        Resume Slideshow
-    </button>
-    
-    <!-- Slide selector - appears when paused -->
-    <div class="slide-selector" id="slideSelector">
-        <!-- Dots will be generated by JavaScript -->
+    <!-- Pause controls - appears for 3 seconds only -->
+    <div class="pause-controls" id="pauseControls">
+        <div class="pause-notification">
+            <i class="fas fa-pause"></i>
+            Slideshow Paused
+        </div>
+        <div class="slide-selector" id="slideSelector">
+            <!-- Dots will be generated by JavaScript -->
+        </div>
+        <button class="resume-btn" id="resumeBtn">
+            <i class="fas fa-play"></i>
+            Resume Slideshow
+        </button>
     </div>
     
     <!-- Progress indicator -->
@@ -483,17 +472,19 @@
             const progressBar = document.getElementById('progressBar');
             const currentSlideEl = document.getElementById('currentSlide');
             const totalSlidesEl = document.getElementById('totalSlides');
-            const pauseNotification = document.getElementById('pauseNotification');
+            const pauseControls = document.getElementById('pauseControls');
             const resumeBtn = document.getElementById('resumeBtn');
             const slideSelector = document.getElementById('slideSelector');
             const slidesContainer = document.getElementById('slidesContainer');
+            const slideCounter = document.querySelector('.slide-counter');
+            const progressContainer = document.querySelector('.progress-container');
             
             let currentIndex = 0;
             const totalSlides = slides.length;
             const slideDuration = 5000; // 5 seconds
             let slideInterval;
             let isPaused = false;
-            let notificationTimeout;
+            let controlsTimeout;
             
             // Set total slides count
             totalSlidesEl.textContent = totalSlides;
@@ -513,7 +504,7 @@
                     dot.addEventListener('click', function(e) {
                         e.stopPropagation();
                         goToSlide(parseInt(this.dataset.index));
-                        extendPauseState();
+                        showControls(); // Show controls again for 3 seconds
                     });
                     
                     slideSelector.appendChild(dot);
@@ -576,60 +567,44 @@
                 }, 10);
             }
             
-            // Show pause state
-            function showPauseState() {
+            // Show controls for 3 seconds
+            function showControls() {
                 // Clear any existing timeout
-                if (notificationTimeout) {
-                    clearTimeout(notificationTimeout);
+                if (controlsTimeout) {
+                    clearTimeout(controlsTimeout);
                 }
                 
-                // Show pause notification
-                pauseNotification.classList.add('show');
+                // Show controls
+                pauseControls.classList.add('show');
                 
-                // Show resume button
-                resumeBtn.classList.add('show');
+                // Hide slide counter and progress bar while controls are visible
+                slideCounter.style.opacity = '0';
+                progressContainer.style.opacity = '0';
                 
-                // Show slide selector
-                slideSelector.classList.add('show');
-                
-                // Auto-hide notification after 3 seconds
-                notificationTimeout = setTimeout(() => {
-                    pauseNotification.classList.remove('show');
+                // Hide controls after 3 seconds
+                controlsTimeout = setTimeout(() => {
+                    hideControls();
                 }, 3000);
             }
             
-            // Extend pause state when interacting with controls
-            function extendPauseState() {
-                if (!isPaused) return;
+            // Hide controls
+            function hideControls() {
+                pauseControls.classList.remove('show');
                 
-                // Show notification again
-                pauseNotification.classList.add('show');
+                // Show slide counter and progress bar again
+                slideCounter.style.opacity = '1';
+                progressContainer.style.opacity = '1';
                 
-                // Clear existing timeout and set new one
-                if (notificationTimeout) {
-                    clearTimeout(notificationTimeout);
-                }
-                
-                notificationTimeout = setTimeout(() => {
-                    pauseNotification.classList.remove('show');
-                }, 3000);
-            }
-            
-            // Hide all pause controls
-            function hidePauseControls() {
-                pauseNotification.classList.remove('show');
-                resumeBtn.classList.remove('show');
-                slideSelector.classList.remove('show');
-                
-                if (notificationTimeout) {
-                    clearTimeout(notificationTimeout);
+                if (controlsTimeout) {
+                    clearTimeout(controlsTimeout);
+                    controlsTimeout = null;
                 }
             }
             
             // Start the slideshow
             function startSlideshow() {
                 isPaused = false;
-                hidePauseControls();
+                hideControls();
                 
                 // Clear any existing interval
                 if (slideInterval) {
@@ -647,9 +622,6 @@
             function pauseSlideshow() {
                 isPaused = true;
                 
-                // Show pause controls
-                showPauseState();
-                
                 // Clear the interval
                 if (slideInterval) {
                     clearInterval(slideInterval);
@@ -661,6 +633,9 @@
                 const width = computedStyle.getPropertyValue('width');
                 progressBar.style.transition = 'none';
                 progressBar.style.width = width;
+                
+                // Show controls for 3 seconds
+                showControls();
             }
             
             // Restart interval after manual navigation
@@ -677,13 +652,23 @@
                 initSlideSelector();
                 startSlideshow();
                 
-                // Click anywhere on slide to pause (except on controls)
+                // Click on slide to toggle pause/play and show controls
                 slidesContainer.addEventListener('click', function(e) {
-                    // Don't trigger if clicking on controls
-                    if (!e.target.closest('.pause-notification') && 
-                        !e.target.closest('.resume-btn') && 
-                        !e.target.closest('.slide-selector') &&
-                        !isPaused) {
+                    // Don't trigger if clicking on controls (they have their own handlers)
+                    if (e.target.closest('.pause-controls')) {
+                        return;
+                    }
+                    
+                    if (isPaused) {
+                        // If paused and controls are hidden, show them
+                        if (!pauseControls.classList.contains('show')) {
+                            showControls();
+                        } else {
+                            // If controls are visible and clicking on slide (not controls), resume
+                            startSlideshow();
+                        }
+                    } else {
+                        // If playing, pause and show controls
                         pauseSlideshow();
                     }
                 });
@@ -705,18 +690,18 @@
                         e.preventDefault();
                     }
                     
-                    // Arrow keys for navigation (works even when paused)
+                    // Arrow keys for navigation
                     if (e.key === 'ArrowRight') {
                         showNextSlide();
                         if (isPaused) {
-                            extendPauseState();
+                            showControls(); // Show controls again for 3 seconds
                         }
                     }
                     
                     if (e.key === 'ArrowLeft') {
                         goToSlide(currentIndex - 1);
                         if (isPaused) {
-                            extendPauseState();
+                            showControls(); // Show controls again for 3 seconds
                         }
                     }
                 });
@@ -741,7 +726,7 @@
                         // Swipe left - next slide
                         showNextSlide();
                         if (isPaused) {
-                            extendPauseState();
+                            showControls(); // Show controls again for 3 seconds
                         }
                     }
                     
@@ -749,16 +734,15 @@
                         // Swipe right - previous slide
                         goToSlide(currentIndex - 1);
                         if (isPaused) {
-                            extendPauseState();
+                            showControls(); // Show controls again for 3 seconds
                         }
                     }
                 }
                 
-                // Auto-hide pause notification when mouse moves (keeps resume button visible)
+                // Reset controls timeout when mouse moves (extend visibility)
                 document.addEventListener('mousemove', function() {
-                    if (isPaused && pauseNotification.classList.contains('show')) {
-                        // Extend the notification timeout when mouse moves
-                        extendPauseState();
+                    if (isPaused && pauseControls.classList.contains('show')) {
+                        showControls(); // Restart 3-second timer
                     }
                 });
             }

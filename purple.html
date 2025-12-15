@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARAB DREAMS - Business Consultancy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #513045;
+            --primary-dark: #3a2332;
+            --primary-light: #6a4a5c;
+            --accent-gold: #c19a5b;
+            --accent-gold-light: #d4b483;
+            --text-light: #f8f7f3;
+            --text-gray: #d1cdc7;
+            --text-dark: #2a1e25;
+            --overlay-dark: rgba(0, 0, 0, 0.6);
+            --overlay-primary: rgba(81, 48, 69, 0.7);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            --transition-slow: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #000;
+            color: var(--text-light);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            font-weight: 300;
+        }
+        
+        /* Professional header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 24px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+            transition: var(--transition-normal);
+        }
+        
+        .header:hover {
+            background: rgba(0,0,0,0.9);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .logo {
+            height: 70px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            transition: transform 0.5s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .company-name {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .tagline {
+            font-size: 14px;
+            color: var(--accent-gold);
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .contact-label {
+            font-size: 12px;
+            color: var(--text-gray);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .contact-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+        
+        /* Slides container */
+        .slides-container {
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Individual slide with background image */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0 120px;
+            opacity: 0;
+            transition: opacity var(--transition-slow);
+            pointer-events: none;
+            transform: translateZ(0);
+        }
+        
+        .slide.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        /* Background image with overlay */
+        .slide-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            transform: scale(1.1);
+            transition: transform 8s ease;
+        }
+        
+        .slide.active .slide-bg {
+            transform: scale(1);
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--overlay-dark) 0%, rgba(0,0,0,0.4) 100%);
+            z-index: -1;
+        }
+        
+        /* Slide content with animations */
+        .slide-content {
+            max-width: 800px;
+            text-align: left;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all var(--transition-normal);
+        }
+        
+        .slide.active .slide-content {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.3s;
+        }
+        
+        .slide-tag {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--accent-gold);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            position: relative;
+            display: inline-block;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all var(--transition-normal);
+        }
+        
+        .slide.active .slide-tag {
+            opacity: 1;
+            transform: translateX(0);
+            transition-delay: 0.5s;
+        }
+        
+        .slide-tag::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 60px;
+            height: 2px;
+            background-color: var(--accent-gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.6s ease;
+            transition-delay: 0.8s;
+        }
+        
+        .slide.active .slide-tag::after {
+            transform: scaleX(1);
+        }
+        
+        .slide-headline {
+            font-size: 72px;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 32px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all var(--transition-normal);
+        }
+        
+        .slide.active .slide-headline {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.7s;
+        }
+        
+        .slide-description {
+            font-size: 24px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--text-gray);
+            max-width: 700px;
+            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all var(--transition-normal);
+        }
+        
+        .slide.active .slide-description {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.9s;
+        }
+        
+        /* Professional slide counter */
+        .slide-counter {
+            position: fixed;
+            bottom: 60px;
+            right: 60px;
+            font-size: 16px;
+            color: var(--text-gray);
+            z-index: 1000;
+            background: rgba(81, 48, 69, 0.8);
+            padding: 16px 24px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(193, 154, 91, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+        
+        .current-slide {
+            color: var(--accent-gold);
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .total-slides {
+            font-size: 16px;
+            opacity: 0.7;
+        }
+        
+        .counter-separator {
+            width: 1px;
+            height: 20px;
+            background: var(--accent-gold);
+            opacity: 0.5;
+        }
+        
+        /* Progress indicator */
+        .progress-container {
+            position: fixed;
+            bottom: 60px;
+            left: 60px;
+            width: 200px;
+            height: 2px;
+            background-color: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-gold) 100%);
+            transition: width 5s linear;
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--accent-gold);
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+        
+        /* Navigation arrows */
+        .nav-arrows {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-arrow {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(81, 48, 69, 0.8);
+            border: 1px solid rgba(193, 154, 91, 0.3);
+            color: var(--text-light);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-arrow:hover {
+            background: rgba(193, 154, 91, 0.8);
+            transform: scale(1.1);
+            border-color: var(--accent-gold);
+        }
+        
+        /* Pause controls */
+        .pause-controls {
+            position: fixed;
+            bottom: 160px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all var(--transition-normal);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(193, 154, 91, 0.2);
+            min-width: 400px;
+        }
+        
+        .pause-controls.show {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .pause-notification {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--accent-gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .slide-selector {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .selector-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+        
+        .selector-dot:hover {
+            transform: scale(1.3);
+            background-color: var(--accent-gold);
+        }
+        
+        .selector-dot.active {
+            background-color: var(--accent-gold);
+            transform: scale(1.2);
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+        
+        .resume-btn {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--text-light);
+            border: none;
+            padding: 16px 32px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all var(--transition-fast);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px solid rgba(193, 154, 91, 0.3);
+        }
+        
+        .resume-btn:hover {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            color: var(--text-dark);
+        }
+        
+        /* Slide indicator dots on the right */
+        .slide-indicators {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 1000;
+            opacity: 0.3;
+            transition: opacity var(--transition-fast);
+        }
+        
+        .slide-indicators:hover {
+            opacity: 1;
+        }
+        
+        .indicator {
+            width: 4px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+        
+        .indicator.active {
+            background: var(--accent-gold);
+            height: 60px;
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+        
+        .indicator:hover {
+            background: var(--accent-gold);
+            transform: scaleX(1.5);
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .slide {
+                padding: 0 80px;
+            }
+            
+            .slide-headline {
+                font-size: 60px;
+            }
+            
+            .slide-description {
+                font-size: 22px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .header {
+                padding: 20px 40px;
+            }
+            
+            .slide {
+                padding: 0 60px;
+            }
+            
+            .slide-headline {
+                font-size: 48px;
+            }
+            
+            .slide-description {
+                font-size: 20px;
+            }
+            
+            .slide-counter, .progress-container {
+                bottom: 40px;
+                left: 40px;
+                right: 40px;
+            }
+            
+            .nav-arrows {
+                bottom: 120px;
+            }
+            
+            .pause-controls {
+                min-width: 350px;
+                padding: 25px 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 30px;
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .contact-info {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .slide {
+                padding: 0 40px;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .slide-content {
+                text-align: center;
+            }
+            
+            .slide-tag::after {
+                left: 50%;
+                transform: translateX(-50%) scaleX(0);
+            }
+            
+            .slide.active .slide-tag::after {
+                transform: translateX(-50%) scaleX(1);
+            }
+            
+            .slide-headline {
+                font-size: 36px;
+            }
+            
+            .slide-description {
+                font-size: 18px;
+            }
+            
+            .slide-counter, .progress-container {
+                bottom: 30px;
+                left: 30px;
+                right: 30px;
+            }
+            
+            .progress-container {
+                width: 150px;
+            }
+            
+            .nav-arrows {
+                bottom: 100px;
+            }
+            
+            .pause-controls {
+                bottom: 140px;
+                min-width: 300px;
+                padding: 20px 25px;
+            }
+            
+            .slide-indicators {
+                right: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 12px 20px;
+            }
+            
+            .logo {
+                height: 50px;
+            }
+            
+            .company-name {
+                font-size: 18px;
+            }
+            
+            .tagline {
+                font-size: 10px;
+            }
+            
+            .contact-item {
+                display: none;
+            }
+            
+            .slide {
+                padding: 0 20px;
+            }
+            
+            .slide-headline {
+                font-size: 28px;
+            }
+            
+            .slide-description {
+                font-size: 16px;
+            }
+            
+            .pause-controls {
+                min-width: 280px;
+                padding: 15px 20px;
+            }
+        }
+        
+        /* Animation for slide transition */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Professional header -->
+    <div class="header">
+        <div class="logo-container">
+            <img src="https://arabdreams.com/wp-content/uploads/2024/11/arab-1.png" alt="ARAB DREAMS" class="logo">
+            <div>
+                <div class="company-name">ARAB DREAMS</div>
+                <div class="tagline">Business Consultancy</div>
+            </div>
+        </div>
+        
+        <div class="contact-info">
+            <div class="contact-item">
+                <div class="contact-label">Email</div>
+                <div class="contact-value">info@arabdreams.com</div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-label">Phone</div>
+                <div class="contact-value">+966 12 345 6789</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide indicators -->
+    <div class="slide-indicators" id="slideIndicators">
+        <!-- Indicators will be generated by JavaScript -->
+    </div>
+    
+    <!-- Pause controls -->
+    <div class="pause-controls" id="pauseControls">
+        <div class="pause-notification">
+            <i class="fas fa-pause"></i>
+            PRESENTATION PAUSED
+        </div>
+        <div class="slide-selector" id="slideSelector">
+            <!-- Dots will be generated by JavaScript -->
+        </div>
+        <button class="resume-btn" id="resumeBtn">
+            <i class="fas fa-play"></i>
+            Resume Presentation
+        </button>
+    </div>
+    
+    <!-- Navigation arrows -->
+    <div class="nav-arrows">
+        <button class="nav-arrow" id="prevBtn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="nav-arrow" id="nextBtn">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+    
+    <!-- Progress indicator -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <!-- Slide counter -->
+    <div class="slide-counter">
+        <span class="current-slide" id="currentSlide">1</span>
+        <div class="counter-separator"></div>
+        <span class="total-slides" id="totalSlides">8</span>
+    </div>
+    
+    <!-- Slides container -->
+    <div class="slides-container" id="slidesContainer">
+        <!-- Slide 1: About Us -->
+        <div class="slide active">
+            <img src="https://images.unsplash.com/photo-1542553458-79a13aebfda6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Riyadh Skyline" class="slide-bg">
+            <div class="overlay"></div>
+            <div class="slide-content">
+                <div class="slide-tag">About Us</div>
+                <h1 class="slide-headline">Premier Business Consultancy for Saudi Arabia & Middle East</h1>
+                <p class="slide-description">Guiding entrepreneurs, startups, and corporations to establish and scale their operations with bespoke solutions tailored to the region's unique business landscape.</p>
+            </div>
+        </div>
+        
+        <!-- Slide 2: Business Setup -->
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Modern Office Building" class="slide-bg">
+            <div class="overlay"></div>
+            <div class="slide-content">
+                <div class="slide-tag">Business Setup</div>
+                <h1 class="slide-headline">Seamless Company Formation & Registration</h1>
+                <p class="slide-description">End-to-end LLC, branch, and entity registration in Saudi Arabia with comprehensive legal and government formalities handled by our expert team.</p>
+            </div>
+        </div>
+        
+        <!-- Slide 3: Business Support -->
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80" alt="Corporate Office Interior" class="slide-bg">
+            <div class="overlay"></div>
+            <div class="slide-content">
+                <div class="slide-tag">Business Support</div>
+                <h1 class="slide-headline">Comprehensive Accounting, Tax & Legal Services</h1>
+                <p class="slide-description">Full-spectrum financial management, tax compliance, legal advisory, and corporate restructuring services to ensure operational excellence and regulatory adherence.</p>
+            </div>
+        </div>
+        
+        <!-- Slide 4: PRO Services -->
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80" alt="Government Building" class="slide-bg">
+            <div class="overlay"></div>
+            <div class="slide-content">
+                <div class="slide-tag">PRO & Government Relations</div>
+                <h1 class="slide-headline">Expert Government Liaison & Visa Processing</h1>
+                <p class="slide-description">Streamlined visa, work permit, licensing, and government documentation support to navigate Saudi Arabia's regulatory environment efficiently.</p>
+            </div>
+        </div>
+        
+        <!-- Slide 5: IP & Brand Services -->
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Legal Documents" class="slide-bg">
+            <div class="overlay"></div>
+            <div class="slide-content">
+                <div class="slide-tag">Intellectual Property</div>
+                <h1 class="slide-headline">Trademark Registration & Strategic Brand Protection</h1>
+                <p class="slide-description">Comprehensive IP protection, trademark registration, and business analysis to safeguard your assets and enhance market positioning in the region.</p>
+            </div>
+        </div>
+        
+        <!-- Slide 6: Target Clients -->
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Business Meeting" class="slide-bg">
+            <div class="overlay"></div>
+            <div class="slide-content">
+                <div class="slide-tag">Our Clients</div>
+                <h1 class="slide-headline">Startups, SMEs & International Investors</h1>
+                <p class="slide-description">Trusted partner for ambitious startups, growing SMEs, foreign investors entering Saudi Arabia, and corporations pursuing strategic regional expansion.</p>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Global Presence -->
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1542744094-24638eff58bb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80" alt="Global Business" class="slide-bg">
+            <div class="overlay"></div>
+            <div class="slide-content">
+                <div class="slide-tag">Global Presence</div>
+                <h1 class="slide-headline">Local Expertise with International Network</h1>
+                <p class="slide-description">Strategic offices across Saudi Arabia (Jeddah, Riyadh, Dammam), UAE, and key international markets including India, UK, and China.</p>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Why Choose Us -->
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Business Success" class="slide-bg">
+            <div class="overlay"></div>
+            <div class="slide-content">
+                <div class="slide-tag">Why Choose Us</div>
+                <h1 class="slide-headline">Your Trusted Partner for Business Success</h1>
+                <p class="slide-description">One-stop solution offering unparalleled expertise in Saudi Arabia's regulatory landscape, serving as the preferred partner for entrepreneurs and international businesses.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const progressBar = document.getElementById('progressBar');
+            const currentSlideEl = document.getElementById('currentSlide');
+            const totalSlidesEl = document.getElementById('totalSlides');
+            const pauseControls = document.getElementById('pauseControls');
+            const resumeBtn = document.getElementById('resumeBtn');
+            const slideSelector = document.getElementById('slideSelector');
+            const slideIndicators = document.getElementById('slideIndicators');
+            const slidesContainer = document.getElementById('slidesContainer');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+            const slideDuration = 7000; // 7 seconds for professional pacing
+            let slideInterval;
+            let isPaused = false;
+            let controlsTimeout;
+            
+            // Set total slides count
+            totalSlidesEl.textContent = totalSlides;
+            
+            // Initialize slide selector dots and indicators
+            function initSlideControls() {
+                slideSelector.innerHTML = '';
+                slideIndicators.innerHTML = '';
+                
+                for (let i = 0; i < totalSlides; i++) {
+                    // Create selector dot
+                    const dot = document.createElement('div');
+                    dot.className = 'selector-dot';
+                    dot.dataset.index = i;
+                    
+                    if (i === currentIndex) {
+                        dot.classList.add('active');
+                    }
+                    
+                    dot.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        goToSlide(parseInt(this.dataset.index));
+                        showControls(); // Show controls again for 3 seconds
+                    });
+                    
+                    slideSelector.appendChild(dot);
+                    
+                    // Create indicator
+                    const indicator = document.createElement('div');
+                    indicator.className = 'indicator';
+                    indicator.dataset.index = i;
+                    
+                    if (i === currentIndex) {
+                        indicator.classList.add('active');
+                    }
+                    
+                    indicator.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        goToSlide(parseInt(this.dataset.index));
+                    });
+                    
+                    slideIndicators.appendChild(indicator);
+                }
+            }
+            
+            // Update slide controls
+            function updateSlideControls() {
+                const dots = document.querySelectorAll('.selector-dot');
+                const indicators = document.querySelectorAll('.indicator');
+                
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+                
+                indicators.forEach((indicator, index) => {
+                    if (index === currentIndex) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Function to show a specific slide
+            function goToSlide(index) {
+                // Hide current slide
+                slides[currentIndex].classList.remove('active');
+                
+                // Update index
+                currentIndex = (index + totalSlides) % totalSlides;
+                
+                // Show next slide
+                slides[currentIndex].classList.add('active');
+                
+                // Update counter
+                currentSlideEl.textContent = currentIndex + 1;
+                
+                // Update slide controls
+                updateSlideControls();
+                
+                // Reset and animate progress bar
+                resetProgressBar();
+                
+                // If slideshow is playing, restart interval
+                if (!isPaused) {
+                    restartInterval();
+                }
+            }
+            
+            // Function to show next slide
+            function showNextSlide() {
+                goToSlide(currentIndex + 1);
+            }
+            
+            // Function to show previous slide
+            function showPrevSlide() {
+                goToSlide(currentIndex - 1);
+            }
+            
+            // Reset progress bar
+            function resetProgressBar() {
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                
+                setTimeout(() => {
+                    if (!isPaused) {
+                        progressBar.style.transition = `width ${slideDuration}ms linear`;
+                        progressBar.style.width = '100%';
+                    }
+                }, 50);
+            }
+            
+            // Show controls for 3 seconds
+            function showControls() {
+                // Clear any existing timeout
+                if (controlsTimeout) {
+                    clearTimeout(controlsTimeout);
+                }
+                
+                // Show controls
+                pauseControls.classList.add('show');
+                
+                // Hide controls after 3 seconds
+                controlsTimeout = setTimeout(() => {
+                    hideControls();
+                }, 3000);
+            }
+            
+            // Hide controls
+            function hideControls() {
+                pauseControls.classList.remove('show');
+                
+                if (controlsTimeout) {
+                    clearTimeout(controlsTimeout);
+                    controlsTimeout = null;
+                }
+            }
+            
+            // Start the slideshow
+            function startSlideshow() {
+                isPaused = false;
+                hideControls();
+                
+                // Clear any existing interval
+                if (slideInterval) {
+                    clearInterval(slideInterval);
+                }
+                
+                // Reset progress bar animation
+                resetProgressBar();
+                
+                // Set interval for slide changes
+                slideInterval = setInterval(showNextSlide, slideDuration);
+            }
+            
+            // Pause the slideshow
+            function pauseSlideshow() {
+                isPaused = true;
+                
+                // Clear the interval
+                if (slideInterval) {
+                    clearInterval(slideInterval);
+                    slideInterval = null;
+                }
+                
+                // Pause progress bar animation
+                const computedStyle = window.getComputedStyle(progressBar);
+                const width = computedStyle.getPropertyValue('width');
+                progressBar.style.transition = 'none';
+                progressBar.style.width = width;
+                
+                // Show controls for 3 seconds
+                showControls();
+            }
+            
+            // Restart interval after manual navigation
+            function restartInterval() {
+                if (slideInterval) {
+                    clearInterval(slideInterval);
+                }
+                
+                slideInterval = setInterval(showNextSlide, slideDuration);
+            }
+            
+            // Initialize slideshow
+            function initSlideshow() {
+                initSlideControls();
+                startSlideshow();
+                
+                // Click on slide to toggle pause/play and show controls
+                slidesContainer.addEventListener('click', function(e) {
+                    // Don't trigger if clicking on controls
+                    if (e.target.closest('.pause-controls') || 
+                        e.target.closest('.nav-arrow') ||
+                        e.target.closest('.slide-indicators')) {
+                        return;
+                    }
+                    
+                    if (isPaused) {
+                        // If paused and controls are hidden, show them
+                        if (!pauseControls.classList.contains('show')) {
+                            showControls();
+                        } else {
+                            // If controls are visible and clicking on slide, resume
+                            startSlideshow();
+                        }
+                    } else {
+                        // If playing, pause and show controls
+                        pauseSlideshow();
+                    }
+                });
+                
+                // Resume button click
+                resumeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    startSlideshow();
+                });
+                
+                // Previous button
+                prevBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showPrevSlide();
+                    if (isPaused) {
+                        showControls();
+                    }
+                });
+                
+                // Next button
+                nextBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showNextSlide();
+                    if (isPaused) {
+                        showControls();
+                    }
+                });
+                
+                // Space bar to toggle pause/play
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === ' ' || e.key === 'Spacebar') {
+                        if (isPaused) {
+                            startSlideshow();
+                        } else {
+                            pauseSlideshow();
+                        }
+                        e.preventDefault();
+                    }
+                    
+                    // Arrow keys for navigation
+                    if (e.key === 'ArrowRight') {
+                        showNextSlide();
+                        if (isPaused) {
+                            showControls();
+                        }
+                    }
+                    
+                    if (e.key === 'ArrowLeft') {
+                        showPrevSlide();
+                        if (isPaused) {
+                            showControls();
+                        }
+                    }
+                });
+                
+                // Touch swipe support for mobile
+                let touchStartX = 0;
+                let touchEndX = 0;
+                
+                slidesContainer.addEventListener('touchstart', function(e) {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+                
+                slidesContainer.addEventListener('touchend', function(e) {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+                
+                function handleSwipe() {
+                    const swipeThreshold = 50;
+                    
+                    if (touchEndX < touchStartX - swipeThreshold) {
+                        // Swipe left - next slide
+                        showNextSlide();
+                        if (isPaused) {
+                            showControls();
+                        }
+                    }
+                    
+                    if (touchEndX > touchStartX + swipeThreshold) {
+                        // Swipe right - previous slide
+                        showPrevSlide();
+                        if (isPaused) {
+                            showControls();
+                        }
+                    }
+                }
+                
+                // Reset controls timeout when mouse moves (extend visibility)
+                document.addEventListener('mousemove', function() {
+                    if (isPaused && pauseControls.classList.contains('show')) {
+                        showControls(); // Restart 3-second timer
+                    }
+                });
+            }
+            
+            // Start the slideshow
+            initSlideshow();
+        });
+    </script>
+</body>
+</html>
